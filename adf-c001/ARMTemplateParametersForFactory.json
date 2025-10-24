@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-c001"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"ls_database_password": {
+			"value": ""
+		},
+		"ls_datalake_accountKey": {
+			"value": ""
+		},
+		"ls_database_properties_typeProperties_server": {
+			"value": "dbserver-ser.database.windows.net"
+		},
+		"ls_database_properties_typeProperties_database": {
+			"value": "db_working"
+		},
+		"ls_database_properties_typeProperties_userName": {
+			"value": "mdsultanahemad"
+		},
+		"ls_datalake_properties_typeProperties_url": {
+			"value": "https://covidreporingsa.dfs.core.windows.net/"
+		},
+		"ls_rest_api_properties_typeProperties_url": {
+			"value": "https://pokeapi.co/api/v2/pokemon"
+		}
+	}
+}
