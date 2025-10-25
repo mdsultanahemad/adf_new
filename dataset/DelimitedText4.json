@@ -1,12 +1,12 @@
 {
-	"name": "DelimitedText2",
+	"name": "DelimitedText4",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_datalake",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"table_name": {
+			"file_name": {
 				"type": "string"
 			}
 		},
@@ -16,7 +16,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@concat(dataset().table_name,'_starting',\nformatDateTime(adddays(startOfMonth(utcNow()),-1),'ddMMMyyyy')\n,'_ending',\nformatDateTime(utcNow(),'ddMMMyyyy'),'.csv'\n\n)",
+					"value": "@dataset().file_name",
 					"type": "Expression"
 				},
 				"folderPath": "files",
