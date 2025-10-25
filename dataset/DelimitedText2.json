@@ -5,11 +5,20 @@
 			"referenceName": "ls_datalake",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"table_name": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat(dataset().table_name,'_starting',\nformatDateTime(adddays(startOfMonth(utcNow()),-1),'ddMMMyyyy')\n,'_ending',\nformatDateTime(utcNow(),'ddMMMyyyy'),'.csv'\n\n)",
+					"type": "Expression"
+				},
 				"folderPath": "files",
 				"fileSystem": "sink"
 			},
