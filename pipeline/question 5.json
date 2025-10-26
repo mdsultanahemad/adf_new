@@ -99,12 +99,85 @@
 							"userProperties": [],
 							"typeProperties": {
 								"items": {
-									"value": "@activity('Get Metadata1').output.childItems",
+									"value": "@activity('Get Metadata2').output.childItems",
 									"type": "Expression"
 								},
 								"condition": {
-									"value": "@equals(1,1 )",
+									"value": "@not(empty(item().name))",
 									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Script1",
+							"type": "Script",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [
+								{
+									"activity": "Filter1",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "ls_database",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "Query",
+										"text": {
+											"value": "insert into source.folder_data\nvalues\n('@{item().name}',@{int(activity('Filter1').output.ItemsCount)})\n\n",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
+							}
+						},
+						{
+							"name": "Lookup1",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Filter1",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "insert into source.folder_data\nselect '@{item().name}',@{int(activity('Filter1').output.ItemsCount)};\nselect 1 as output;",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ds_database",
+									"type": "DatasetReference"
 								}
 							}
 						}
