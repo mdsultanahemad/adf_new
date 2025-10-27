@@ -30,8 +30,283 @@
 						"type": "BinaryReadSettings"
 					}
 				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Metadata1').output.childItems",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Get Metadata2",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "Binary2",
+									"type": "DatasetReference",
+									"parameters": {
+										"folder_name": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"childItems"
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Get Metadata2",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@empty(activity('Get Metadata2').output.childItems)",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Append variable2",
+										"type": "AppendVariable",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "NonEmptyFolder",
+											"value": {
+												"value": "@item().name",
+												"type": "Expression"
+											}
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Append variable1",
+										"type": "AppendVariable",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "EmptyFolder",
+											"value": {
+												"value": "@item().name",
+												"type": "Expression"
+											}
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "ForEach1_copy1",
+				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Metadata1').output.childItems",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Get Metadata2_copy1",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "Binary2",
+									"type": "DatasetReference",
+									"parameters": {
+										"folder_name": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"childItems",
+									"exists"
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							}
+						},
+						{
+							"name": "Filter1_copy1",
+							"type": "Filter",
+							"dependsOn": [
+								{
+									"activity": "Get Metadata2_copy1",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"items": {
+									"value": "@activity('Get Metadata2').output.childItems",
+									"type": "Expression"
+								},
+								"condition": {
+									"value": "@equals(1,1)",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set variable1_copy1",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Filter1_copy1",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "var",
+								"value": {
+									"value": "@activity('Filter1').output.ItemsCount",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText6",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_database",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
+		"variables": {
+			"EmptyFolder": {
+				"type": "Array"
+			},
+			"NonEmptyFolder": {
+				"type": "Array"
+			}
+		},
 		"annotations": []
 	}
 }
