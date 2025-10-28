@@ -14,12 +14,71 @@
 					},
 					"activities": [
 						{
-							"name": "Wait2",
-							"type": "Wait",
+							"name": "Lookup1",
+							"type": "Lookup",
 							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
-								"waitTimeInSeconds": 1
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": "select status_value from [source].[status_check]",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ds_database",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Lookup1",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(activity('Lookup1').output.firstRow.status_value,'Y')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "If Condition1",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "var",
+								"value": {
+									"value": "True",
+									"type": "Expression"
+								}
 							}
 						}
 					],
