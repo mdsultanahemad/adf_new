@@ -1,0 +1,19 @@
+{
+	"name": "Iceberg1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_datalake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Iceberg",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "files",
+				"fileSystem": "source"
+			}
+		},
+		"schema": []
+	}
+}
