@@ -11,6 +11,12 @@
 						"dependencyConditions": [
 							"Completed"
 						]
+					},
+					{
+						"activity": "Set variable3",
+						"dependencyConditions": [
+							"Completed"
+						]
 					}
 				],
 				"policy": {
@@ -81,7 +87,7 @@
 									}
 								},
 								"fieldList": [
-									"childItems",
+									"itemName",
 									"lastModified"
 								],
 								"storeSettings": {
@@ -91,6 +97,61 @@
 								"formatSettings": {
 									"type": "DelimitedTextReadSettings"
 								}
+							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Get Metadata2",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@greater(\n    formatDateTime(activity('Get Metadata2').output.lastModified,'yyyy-MM-ddT:HH:mm:ssZ' ),\n    formatDateTime(variables('date_value'),'yyyy-MM-ddT:HH:mm:ssZ')\n    )",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Set variable2",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "file_name",
+											"value": {
+												"value": "@activity('Get Metadata2').output.itemName",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "Set variable5",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "date_value",
+											"value": {
+												"value": "@activity('Get Metadata2').output.lastModified",
+												"type": "Expression"
+											}
+										}
+									}
+								]
 							}
 						}
 					]
@@ -107,16 +168,57 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "date_value",
-					"value": "'1900-01-01'"
+					"value": "1900-01-01T00:00:00Z\n"
+				}
+			},
+			{
+				"name": "Set variable3",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "file_name",
+					"value": "\" \""
+				}
+			},
+			{
+				"name": "Set variable4",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var_3",
+					"value": {
+						"value": "@variables('file_name')",
+						"type": "Expression"
+					}
 				}
 			}
 		],
 		"variables": {
 			"date_value": {
 				"type": "String",
-				"defaultValue": "'1900-01-01'"
+				"defaultValue": "1900-01-01T00:00:00Z"
 			},
 			"file_name": {
+				"type": "String"
+			},
+			"var_3": {
 				"type": "String"
 			}
 		},
