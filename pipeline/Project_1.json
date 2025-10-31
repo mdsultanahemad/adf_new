@@ -54,25 +54,6 @@
 				}
 			},
 			{
-				"name": "If Condition2",
-				"type": "IfCondition",
-				"dependsOn": [
-					{
-						"activity": "If Condition3",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"expression": {
-						"value": "@equals(variables('setFlag'),'True' )",
-						"type": "Expression"
-					}
-				}
-			},
-			{
 				"name": "If Condition3",
 				"type": "IfCondition",
 				"dependsOn": [
@@ -107,37 +88,25 @@
 					],
 					"ifTrueActivities": [
 						{
-							"name": "Set variable3",
-							"type": "SetVariable",
+							"name": "Execute Pipeline1",
+							"type": "ExecutePipeline",
 							"dependsOn": [],
 							"policy": {
-								"secureOutput": false,
 								"secureInput": false
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "setFlag",
-								"value": "True"
+								"waitOnCompletion": true
 							}
 						}
 					]
 				}
 			},
 			{
-				"name": "Wait1",
-				"type": "Wait",
-				"dependsOn": [
-					{
-						"activity": "If Condition2",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"waitTimeInSeconds": 1
-				}
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": []
 			}
 		],
 		"variables": {
