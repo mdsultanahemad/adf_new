@@ -31,6 +31,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -57,7 +58,7 @@
 				"type": "IfCondition",
 				"dependsOn": [
 					{
-						"activity": "Get Metadata1",
+						"activity": "If Condition3",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -69,6 +70,41 @@
 						"value": "@equals(variables('setFlag'),'True' )",
 						"type": "Expression"
 					}
+				}
+			},
+			{
+				"name": "If Condition3",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@and(\n    and(\n        and(\n            contains(string(activity('Get Metadata1').output.childItems), 'customers.csv'),\n            contains(string(activity('Get Metadata1').output.childItems), 'products.csv')\n        ),\n        contains(string(activity('Get Metadata1').output.childItems), 'transactions.csv')\n    ),\n    equals(length(activity('Get Metadata1').output.childItems), 3)\n)\n",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Set variable3",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "setFlag",
+								"value": "True"
+							}
+						}
+					]
 				}
 			}
 		],
