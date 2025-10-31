@@ -86,9 +86,25 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@and(\n    and(\n        and(\n            contains(string(activity('Get Metadata1').output.childItems), 'customers.csv'),\n            contains(string(activity('Get Metadata1').output.childItems), 'products.csv')\n        ),\n        contains(string(activity('Get Metadata1').output.childItems), 'transactions.csv')\n    ),\n    equals(length(activity('Get Metadata1').output.childItems), 3)\n)\n",
+						"value": "@and(\n    and(\n        and(\n            contains(string(activity('Get Metadata1').output.childItems), 'customers.csv'),\n            contains(string(activity('Get Metadata1').output.childItems), 'products.csv')\n        ),\n        contains(string(activity('Get Metadata1').output.childItems), 'transactions.csv')\n    ),\n    equals(length(activity('Get Metadata1').output.childItems), 2)\n)\n",
 						"type": "Expression"
 					},
+					"ifFalseActivities": [
+						{
+							"name": "Set variable4",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "setFlag",
+								"value": "False"
+							}
+						}
+					],
 					"ifTrueActivities": [
 						{
 							"name": "Set variable3",
@@ -105,6 +121,22 @@
 							}
 						}
 					]
+				}
+			},
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "If Condition2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
 				}
 			}
 		],
