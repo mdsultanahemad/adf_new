@@ -23,7 +23,7 @@
 						{
 							"type": "Query",
 							"text": {
-								"value": "truncate table @'{pipeline().parameters.file_name}'",
+								"value": "@concat('truncate table dbo.', pipeline().parameters.file_name)",
 								"type": "Expression"
 							}
 						}
