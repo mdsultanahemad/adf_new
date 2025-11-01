@@ -42,7 +42,7 @@
 									{
 										"type": "Query",
 										"text": {
-											"value": "@concat('truncate table dbo.',item().name)",
+											"value": "@replace(concat('truncate table dbo.',item().name),'.csv','')",
 											"type": "Expression"
 										}
 									}
