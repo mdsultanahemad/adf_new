@@ -1,6 +1,37 @@
 {
 	"name": "project_1_inner_pipeline",
 	"properties": {
+		"activities": [
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_onprem_sql_stg_db",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": {
+								"value": "TRUNCATE TABLE dbo.stg_customers;\nTRUNCATE TABLE dbo.stg_products;\nTRUNCATE TABLE dbo.stg_transactions;\n",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
 		"annotations": []
 	}
 }
