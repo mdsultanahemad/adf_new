@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Script1",
+				"name": "trurncate staging db",
 				"type": "Script",
 				"dependsOn": [],
 				"policy": {
@@ -14,8 +14,20 @@
 					"secureInput": false
 				},
 				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_onprem_sql_stg_db",
+					"type": "LinkedServiceReference"
+				},
 				"typeProperties": {
-					"scripts": [],
+					"scripts": [
+						{
+							"type": "Query",
+							"text": {
+								"value": "truncate table @'{pipeline().parameters.file_name}'",
+								"type": "Expression"
+							}
+						}
+					],
 					"scriptBlockExecutionTimeout": "02:00:00"
 				}
 			}
