@@ -23,7 +23,7 @@
 						{
 							"type": "Query",
 							"text": {
-								"value": "TRUNCATE TABLE dbo.stg_customers;\nTRUNCATE TABLE dbo.stg_products;\nTRUNCATE TABLE dbo.stg_transactions;\n",
+								"value": "TRUNCATE TABLE dbo.customers;\nTRUNCATE TABLE dbo.products;\nTRUNCATE TABLE dbo.transactions;\n",
 								"type": "Expression"
 							}
 						}
