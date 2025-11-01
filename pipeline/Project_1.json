@@ -75,7 +75,17 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"waitOnCompletion": true
+								"pipeline": {
+									"referenceName": "project_1_inner_pipeline",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"file_name": {
+										"value": "@activity('Get Metadata1').output.childItems",
+										"type": "Expression"
+									}
+								}
 							}
 						}
 					]
