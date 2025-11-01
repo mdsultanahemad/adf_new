@@ -46,7 +46,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@and(\n    and(\n        and(\n            contains(string(activity('Get Metadata1').output.childItems), 'customers.csv'),\n            contains(string(activity('Get Metadata1').output.childItems), 'products.csv')\n        ),\n        contains(string(activity('Get Metadata1').output.childItems), 'transactions.csv')\n    ),\n    equals(length(activity('Get Metadata1').output.childItems), 2)\n)\n",
+						"value": "@and(\n    and(\n        and(\n            contains(string(activity('Get Metadata1').output.childItems), 'customers.csv'),\n            contains(string(activity('Get Metadata1').output.childItems), 'products.csv')\n        ),\n        contains(string(activity('Get Metadata1').output.childItems), 'transactions.csv')\n    ),\n    equals(length(activity('Get Metadata1').output.childItems), 3)\n)\n",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
@@ -79,23 +79,11 @@
 									"referenceName": "project_1_inner_pipeline",
 									"type": "PipelineReference"
 								},
-								"waitOnCompletion": true,
-								"parameters": {
-									"file_name": {
-										"value": "@activity('Get Metadata1').output.childItems",
-										"type": "Expression"
-									}
-								}
+								"waitOnCompletion": true
 							}
 						}
 					]
 				}
-			},
-			{
-				"name": "ForEach1",
-				"type": "ForEach",
-				"dependsOn": [],
-				"userProperties": []
 			}
 		],
 		"variables": {
