@@ -22,7 +22,7 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Script1",
+							"name": "truncate activity",
 							"type": "Script",
 							"dependsOn": [],
 							"policy": {
