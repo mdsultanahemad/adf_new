@@ -67,19 +67,29 @@
 					],
 					"ifTrueActivities": [
 						{
-							"name": "Execute Pipeline1",
-							"type": "ExecutePipeline",
+							"name": "Script1",
+							"type": "Script",
 							"dependsOn": [],
 							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
 								"secureInput": false
 							},
 							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "ls_onprem_sql_stg_db",
+								"type": "LinkedServiceReference"
+							},
 							"typeProperties": {
-								"pipeline": {
-									"referenceName": "project_1_inner_pipeline",
-									"type": "PipelineReference"
-								},
-								"waitOnCompletion": true
+								"scripts": [
+									{
+										"type": "Query",
+										"text": "TRUNCATE TABLE dbo.customers;\nTRUNCATE TABLE dbo.products;\nTRUNCATE TABLE dbo.transactions;\n"
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
 							}
 						}
 					]
