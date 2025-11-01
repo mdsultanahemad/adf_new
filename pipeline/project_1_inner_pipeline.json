@@ -1,42 +1,6 @@
 {
 	"name": "project_1_inner_pipeline",
 	"properties": {
-		"activities": [
-			{
-				"name": "trurncate staging db",
-				"type": "Script",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"linkedServiceName": {
-					"referenceName": "ls_onprem_sql_stg_db",
-					"type": "LinkedServiceReference"
-				},
-				"typeProperties": {
-					"scripts": [
-						{
-							"type": "Query",
-							"text": {
-								"value": "@concat('truncate table dbo.', pipeline().parameters.file_name)",
-								"type": "Expression"
-							}
-						}
-					],
-					"scriptBlockExecutionTimeout": "02:00:00"
-				}
-			}
-		],
-		"parameters": {
-			"file_name": {
-				"type": "string"
-			}
-		},
 		"annotations": []
 	}
 }
